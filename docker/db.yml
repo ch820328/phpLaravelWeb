@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+##############
+    mysql:
+      build:
+        context: ./mysql
+        args:
+          - MYSQL_CONFIGURATION=${MYSQL_CONFIGURATION}
+      environment:
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+        - TZ=${WORKSPACE_TIMEZONE}
+      volumes:
+        - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
+      ports:
+        - "${MYSQL_PORT}:3306"
+      restart: always
+      networks:
+        - backend
+
+### Redis Container #########################################
+
+    redis:
+      build: ./redis
+      volumes:
+        - ${DATA_PATH_HOST}/redis:/data
+      ports:
+        - "${REDIS_PORT}:6379"
+      restart: always
+      networks:
+        - backend
+
+### Networks Setup ############################################
+
+networks:
+  backend:
+    driver: ${NETWORKS_DRIVER}
+
+### Volumes Setup #############################################
+
+volumes:
+  mysql:
+    driver: ${VOLUMES_DRIVER}
