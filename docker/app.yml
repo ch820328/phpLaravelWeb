@@ -219,6 +219,7 @@ services:
     ports:
       - "${NGINX_HOST_HTTP_PORT}:80"
       - "${NGINX_HOST_HTTPS_PORT}:443"
+      - "${NGINX_STORAGE_HOST_HTTP_PORT}:8080"
     restart: always
     networks:
       - frontend
