@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::routes();
+
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/home', 'HomeController@index');
+
+Route::group(['middleware' => ['auth']], function () {
+
+//    Route::get('/home', 'HomeController@index');
+
+//    Route::group(['prefix' => 'test-item', 'middleware' => 'role:administrator|biosToolDeveloper'], function () {
+//        Route::get('create', 'TestItemController@showCreate');
+//        Route::post('create', 'TestItemController@create');
+//        Route::get('update/{id}', 'TestItemController@showUpdate');
+//        Route::post('update/{id}', 'TestItemController@update');
+//        Route::delete('delete/{id}', 'TestItemController@delete');
+//        Route::group(['prefix' => '{testItemId}/condition'], function () {
+//            Route::get('list', 'TestItemConditionController@list');
+//        });
+//    });
 });

@@ -21,11 +21,8 @@ const router = VueRouter.createRouter({
 })
 
 const app = Vue.createApp(RootComponent)
+app.config.globalProperties.$http = axios
+app.use(router).use(ElementPlus);
 
-app.config.globalProperties.$http=axios
-
-app.use(router)
-    .use(ElementPlus);
-
-app.mount('#app')
-
+const vm = app.mount('#app')
+console.log('count is: ' + vm.count)
