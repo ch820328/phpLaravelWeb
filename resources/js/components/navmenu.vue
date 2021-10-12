@@ -43,8 +43,8 @@
             <el-menu-item index="3-1">Option 1</el-menu-item>
             <el-menu-item index="3-2">Option 2</el-menu-item>
         </el-sub-menu>
-        <navmenu_setting></navmenu_setting>
     </el-menu>
+    <navmenu_setting></navmenu_setting>
 </template>
 <script>
 import navmenu_setting from './navmenu-setting'
