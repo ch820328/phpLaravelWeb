@@ -31,6 +31,9 @@
     "dependencies": {
         "@vue/cli": "^5.0.0-beta.3",
         "element-plus": "^1.1.0-beta.20",
-        "vue-router": "^4.0.11"
+        "vue-router": "^4.0.11",
+        "vue-sweetalert2": "^2.1.1",
+        "bootstrap-datepicker": "^1.9.0",
+        "sweetalert2": "^8.13.0"
     }
 }
