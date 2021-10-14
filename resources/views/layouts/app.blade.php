@@ -21,8 +21,6 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body style="height: 100%;">
-    <div id="app" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0;">
-
-    </div>
+    @yield('content')
 </body>
 </html>

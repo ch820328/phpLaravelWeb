@@ -20,7 +20,7 @@
                 <i class="el-icon-location"></i>
                 <span>Administrator</span>
             </template>
-            <el-menu-item index="/home/administrator/1">Option 1</el-menu-item>
+            <el-menu-item index="/home/administrator/user-list">User List</el-menu-item>
             <el-sub-menu index="/home/administrator/2">
                 <template #title>Group 2</template>
                 <el-menu-item index="/home/administrator/2-1">Option 2-1</el-menu-item>
