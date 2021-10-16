@@ -16,6 +16,7 @@ import ElementPlus from 'element-plus'
 import RootComponent from "./components/App.vue"
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+import VCalendar from 'v-calendar';
 
 const router = VueRouter.createRouter({
     history: VueRouter.createWebHistory(),
@@ -24,5 +25,5 @@ const router = VueRouter.createRouter({
 
 const app = Vue.createApp(RootComponent)
 app.config.globalProperties.$http = axios
-app.use(router).use(VueSweetalert2).use(ElementPlus);
+app.use(router).use(VueSweetalert2).use(VCalendar, {}).use(ElementPlus);
 app.mount('#app')

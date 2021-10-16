@@ -17,20 +17,15 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', 'HomeController@index');
-Route::get('/home', 'HomeController@index');
 Route::get('/logout', 'UserController@logout');
+
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('/home', 'HomeController@index');
+    Route::get('/home/{any}', 'HomeController@index');
 
-//    Route::get('/home', 'HomeController@index');
+    Route::group(['prefix' => 'home'], function () {
+        Route::get('administrator/{any}', 'HomeController@index');
+        Route::get('message/{any}', 'HomeController@index');
+    });
 
-//    Route::group(['prefix' => 'test-item', 'middleware' => 'role:administrator|biosToolDeveloper'], function () {
-//        Route::get('create', 'TestItemController@showCreate');
-//        Route::post('create', 'TestItemController@create');
-//        Route::get('update/{id}', 'TestItemController@showUpdate');
-//        Route::post('update/{id}', 'TestItemController@update');
-//        Route::delete('delete/{id}', 'TestItemController@delete');
-//        Route::group(['prefix' => '{testItemId}/condition'], function () {
-//            Route::get('list', 'TestItemConditionController@list');
-//        });
-//    });
 });
