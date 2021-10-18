@@ -1,67 +1,76 @@
 <template>
-    <div style="font-size: 20px; font-weight: bold;">Calendar</div>
-    <el-container style="height: 100%;">
-        <div class="text-center section" style="width: 100%">
-            <v-calendar class="custom-calendar max-w-full"
-                        :masks="masks"
-                        :attributes="attributes"
-                        disable-page-swipe
-                        is-expanded
-                        show-weeknumbers
-                        style="width: 100%">
-                <div slot="day-popover-header"
-                     slot-scope="{ day, dayTitle, attributes }">
-                </div>
-            </v-calendar>
-        </div>
-    </el-container>
+    <div>
+        <el-row :gutter="20">
+            <el-col :xs="24" :sm="24" :md="17" :lg="17" :xl="17">
+                <el-card class="box-card" :body-style="{ padding: '10px' }">
+                    <home_calendar></home_calendar>
+                </el-card>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="7" :lg="7" :xl="7">
+                <el-card class="box-card" :body-style="{ padding: '10px' }">
+                    <home_user_list></home_user_list>
+                </el-card>
+            </el-col>
+        </el-row>
+        <el-row :gutter="20">
+            <el-col :xs="24" :sm="24" :md="17" :lg="17" :xl="17">
+                <el-card class="box-card" :body-style="{ padding: '10px' }">
+                    <hom_future_event_list></hom_future_event_list>
+                </el-card>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="7" :lg="7" :xl="7">
+                <el-card class="box-card" :body-style="{ padding: '10px' }">
+                    <home_add_calendar_event></home_add_calendar_event>
+                </el-card>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 
 <script>
+import home_add_calendar_event from './home-add-calendar-event.vue'
+import home_calendar from './home-calendar.vue'
+import hom_future_event_list from './home-future-event-list.vue'
+import home_user_list from './home-user-list.vue'
+
 export default {
+    props: ["title"],
     data() {
-        const month = new Date().getMonth();
-        const year = new Date().getFullYear();
         return {
-            masks: {
-                weekdays: 'WWW',
-                date: 'YYYY-MM-DD',
-            },
-            attributes: [
-                {
-                    highlight: {
-                        start: {fillMode: 'light'},
-                        base: {fillMode: 'light'},
-                        end: {fillMode: 'light'},
-                    },
-                    popover: {
-                        label: 'test1',
-                    },
-                    dates: {
-                        start: new Date(year, month, 10),
-                        end: new Date(year, month, 14)
-                    },
-                },
-                {
-                    highlight: {
-                        color: 'orange',
-                        fillMode: 'light',
-                    },
-                    dates: new Date(year, month, 15),
-                },
-                {
-                    key: 1,
-                    customData: {
-                        description: 'test',
-                    },
-                    popover: {
-                        label: 'test',
-                    },
-                    dot: true,
-                    dates: new Date(year, month, 18),
-                },
-            ],
+            header_title_update: "Calendar",
         };
+    },
+    created() {
+        this.update_header_title();
+    },
+    mounted() {
+    },
+    destroyed() {
+    },
+    methods: {
+        update_header_title() {
+            this.$emit("update_title_event", this.header_title_update);
+        }
+    },
+    components: {
+        home_calendar,
+        home_user_list,
+        home_add_calendar_event,
+        hom_future_event_list,
     },
 };
 </script>
+<style>
+.el-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.el-row .el-card {
+    min-width: 100%;
+    height: 100%;
+    margin-right: 20px;
+    border-radius: 0.5em;
+}
+</style>

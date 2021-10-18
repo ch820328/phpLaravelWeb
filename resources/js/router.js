@@ -23,13 +23,13 @@ export default [
                 path: "/home/administrator/user-list",
                 name: "user-list",
                 component: () =>
-                    import("./components/layout/home/administrator/user-list.vue")
+                    import("./components/layout/home/administrator/administrator-user-list.vue")
             },
             {
                 path: "/home/administrator/2-1",
                 name: "administrator2",
                 component: () =>
-                    import("./components/layout/home/administrator/two.vue")
+                    import("./components/layout/home/administrator/administrator-user-list.vue")
             },
         ]
     },

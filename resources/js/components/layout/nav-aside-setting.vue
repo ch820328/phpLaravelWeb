@@ -1,5 +1,5 @@
 <template>
-    <el-dropdown style="position: absolute; top: 8px; right: 20px; font-size: 18px;" @command="handleCommand">
+    <el-dropdown style="position: absolute; top: 3px; right: 20px; font-size: 18px;" @command="handleCommand">
         <span class="el-dropdown-link" style="font-weight: bold;">
             <span style="position: relative; top: -2px;">Setting &nbsp;</span><i class="el-icon-setting" style="font-size: 125%"></i>
         </span>

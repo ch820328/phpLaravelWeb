@@ -17,11 +17,15 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', 'HomeController@index');
-Route::get('/logout', 'UserController@logout');
+Route::get('/logout', 'UsersController@logout');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/home', 'HomeController@index');
-    Route::get('/home/{any}', 'HomeController@index');
+    Route::get('/home/calendar', 'HomeController@getCalendarEvent');
+    Route::get('/home/user-list', 'HomeController@getUserList');
+    Route::get('/home/future-event-list', 'HomeController@getFutureEventList');
+    Route::post('/home/add-calendar-event', 'HomeController@addCalendarEvent');
+    Route::delete('/home/delete-calendar-event/{eventId}', 'HomeController@deleteCalendarEvent');
 
     Route::group(['prefix' => 'home'], function () {
         Route::get('administrator/{any}', 'HomeController@index');
@@ -29,3 +33,7 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
 });
+
+Route::get('/test-data', 'TestController@Test');
+Route::get('/test-data2', 'HomeController@getUserList');
+
