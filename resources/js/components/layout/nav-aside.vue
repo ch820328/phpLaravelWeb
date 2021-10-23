@@ -4,16 +4,21 @@
         default-active="$route.path"
         router
         class="el-menu-vertical-demo"
+        :collapse=is_collapse
+        :collapse-transition="false"
         @open="handleOpen"
         @close="handleClose"
         background-color="#545c64"
         text-color="#ffffff"
         active-text-color="#ffd04b"
         style="border-right-width: 0;">
-        <el-menu-item index="/home">
-            <a href="http://localhost/home/">
-                <div style="text-align:center; font-weight: bold; font-size: 24px; color: #ffffff">Sepan</div>
-            </a>
+        <el-menu-item index="/home"><a href="http://localhost/home/" style="color: #ffffff;">
+            <!--            <a href="http://localhost/home/">-->
+            <!--                <div style="text-align:center; font-weight: bold; font-size: 24px; color: #ffffff"><i class="el-icon-s-home"></i>Sepan</div>-->
+            <!--            </a>-->
+            <i class="el-icon-s-home" style="font-size: 125%;"></i>
+            <span style="text-align:center; font-weight: bold; font-size: 24px;">
+                Sepan</span></a>
         </el-menu-item>
         <el-sub-menu index="/home/administrator">
             <template #title>
@@ -35,12 +40,14 @@
             <el-menu-item index="/home/message/2">Option 2</el-menu-item>
         </el-sub-menu>
     </el-menu>
-
 </template>
 <script>
 export default {
+    props: ["is_collapse"],
     data() {
         return {}
+    },
+    created() {
     },
     methods: {
         handleOpen(key, keyPath) {
@@ -51,7 +58,16 @@ export default {
         }
     },
     mounted() {
-        console.log(this.$route);
+    },
+    method: {
+        toHomePage() {
+            location.reload();
+        },
     },
 };
 </script>
+<style>
+.el-sub-menu__title, .el-menu-item {
+    font-size: 16px;
+}
+</style>
