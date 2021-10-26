@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Services\CalendarEventService;
 use App\Services\UsersService;
-use DB;
-use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Support\Facades\Auth;
+use DB;
 use Log;
+use Exception;
 use Throwable;
 
 class HomeController extends Controller
@@ -67,33 +67,46 @@ class HomeController extends Controller
     /**
      * @param Request $request
      *
-     * @return bool
+     * @return JsonResponse
      */
-    public function addCalendarEvent(Request $request): bool
+    public function addCalendarEvent(Request $request): JsonResponse
     {
-        $userId   = Auth::user()->{'id'};
-        $userName = Auth::user()->{'name'};
-        return $this->calendarEventService->createCalendarEvent($request, $userId, $userName);
+        Log::info(__CLASS__ . ' - ' .  __FUNCTION__ . ' - ' . __LINE__);
+        Log::info($request);
+        $result = $this->calendarEventService->createCalendarEvent($request);
+
+        if ($result) {
+            $statusCode = 201;
+        } else {
+            $statusCode = 400;
+        }
+        return response()->json(['result' => $result], $statusCode);
     }
 
     /**
      * @param int $eventId
      *
-     * @return bool
+     * @return JsonResponse
      * @throws Throwable
      */
-    public function deleteCalendarEvent(int $eventId): bool
+    public function deleteCalendarEvent(int $eventId): JsonResponse
     {
         DB::beginTransaction();
         try {
             $result = $this->calendarEventService->deleteCalendarEvent($eventId);
             DB::commit();
         } catch (Exception $e) {
-            Log::error($e->getMessage(), $e->getTrace());
+            Log::info(__CLASS__ . ' - ' .  __FUNCTION__ . ' - ' . __LINE__);
+            Log::error($e->getMessage());
             DB::rollBack();
             throw $e;
         }
 
-        return $result;
+        if ($result) {
+            $statusCode = 204;
+        } else {
+            $statusCode = 400;
+        }
+        return response()->json(['result' => $result], $statusCode);
     }
 }

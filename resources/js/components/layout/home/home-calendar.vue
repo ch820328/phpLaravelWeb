@@ -3,7 +3,7 @@
                 :masks="masks"
                 :attributes="attributes"
                 title-position="center"
-                :first-day-of-week="2"
+                :first-day-of-week="1"
                 is-expanded
                 show-weeknumbers>
         <div slot="day-popover-header"
@@ -18,7 +18,8 @@ export default {
         return {
             today: new Date(),
             masks: {
-                weekdays: 'WWWW',
+                weekdays: 'W',
+                title: 'YYYY/MM',
             },
             attributes: [
                 {
@@ -46,8 +47,8 @@ export default {
     methods: {
         async getCalendarEvent() {
             let axios_response;
-            console.log('API: get => /home/calendar');
-            await axios.get('/home/calendar', {}).then(function (response) {
+            console.log('API: get => /home/calendar/get');
+            await axios.get('/home/calendar/get', {}).then(function (response) {
                 axios_response = response
                 console.log(axios_response);
             }).catch(function (error) {
@@ -109,14 +110,19 @@ export default {
 }
 
 .vc-dots {
-    padding-bottom: 7px;
+    padding-bottom: 6px;
 }
 
 .vc-dot {
-    padding: 3px
+    padding: 4px
 }
 
 .vc-popover-content-wrapper, .vc-popover-content {
     font-size: 16px
+}
+
+.custom-calendar.vc-container .vc-day.weekday-1,
+.custom-calendar.vc-container .vc-day.weekday-7 {
+    color: #ff6464;
 }
 </style>

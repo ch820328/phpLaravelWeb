@@ -26,7 +26,6 @@
         </el-row>
     </div>
 </template>
-
 <script>
 import home_add_calendar_event from './home-add-calendar-event.vue'
 import home_calendar from './home-calendar.vue'
@@ -37,7 +36,7 @@ export default {
     props: ["title"],
     data() {
         return {
-            header_title_update: "Calendar",
+            header_title_update: "首頁",
         };
     },
     created() {

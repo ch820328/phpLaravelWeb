@@ -3,15 +3,15 @@
              :model="form_add_calendar_event"
              :rules="form_add_calendar_event_rules"
              label-width="80px">
-        <el-form-item label="Day" prop="type">
+        <el-form-item label="類型" prop="type">
             <el-radio-group v-model="form_add_calendar_event.type" size="small">
-                <el-radio-button label="True">Single</el-radio-button>
-                <el-radio-button label="False">Multi</el-radio-button>
+                <el-radio-button label="True">單天</el-radio-button>
+                <el-radio-button label="False">多天</el-radio-button>
             </el-radio-group>
         </el-form-item>
-        <el-form-item label="Name" prop="Name">
+        <el-form-item label="使用者" prop="Name">
             <el-col :span="22">
-                <el-select v-model="form_add_calendar_event.name" placeholder="Choose one">
+                <el-select v-model="form_add_calendar_event.name" placeholder="選擇使用者">
                     <el-col :span="24">
                         <el-option
                             v-for="item in name_list"
@@ -22,35 +22,35 @@
                 </el-select>
             </el-col>
         </el-form-item>
-        <el-form-item label="Start Date" prop="start_date">
+        <el-form-item label="開始" prop="start_date">
             <el-col :span="12">
                 <el-date-picker
                     :disabledDate="disabledDate"
                     v-model="form_add_calendar_event.start_date"
                     type="date"
-                    placeholder="Start date">
+                    placeholder="選擇開始日期">
                 </el-date-picker>
             </el-col>
         </el-form-item>
-        <el-form-item label="Time" prop="end_date" v-show="form_add_calendar_event.type === 'False'">
+        <el-form-item label="結束" prop="end_date" v-show="form_add_calendar_event.type === 'False'">
             <el-col :span="12">
                 <el-date-picker
                     :disabledDate="disabledDate"
                     v-model="form_add_calendar_event.end_date"
                     type="date"
-                    placeholder="End date">
+                    placeholder="選擇結束日期">
                 </el-date-picker>
             </el-col>
         </el-form-item>
-        <el-form-item label="Event" prop="event">
+        <el-form-item label="事件" prop="event">
             <el-col class="textarea_event" :span="24">
                 <el-input v-model="form_add_calendar_event.event" type="textarea"
-                          :autosize="{ minRows: 2, maxRows: 10 }"></el-input>
+                          :autosize="{ minRows: 3, maxRows: 10 }"></el-input>
             </el-col>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="onSubmit('form_add_calendar_event')">Create</el-button>
-            <el-button type="danger" @click="resetForm('form_add_calendar_event')">Reset</el-button>
+            <el-button type="primary" @click="onSubmit('form_add_calendar_event')">新建</el-button>
+            <el-button type="danger" @click="resetForm('form_add_calendar_event')">重置</el-button>
         </el-form-item>
     </el-form>
 </template>
@@ -64,8 +64,8 @@ export default {
             } else {
                 if (this.form_add_calendar_event.event !== '') {
                     this.$refs.form_add_calendar_event.validateField('checkPass')
+                    callback()
                 }
-                callback()
             }
         };
         const validateStartDate = (rule, value, callback) => {
@@ -85,8 +85,8 @@ export default {
             } else {
                 if (this.form_add_calendar_event.start_date !== '') {
                     this.$refs.form_add_calendar_event.validateField('checkPass')
+                    callback()
                 }
-                callback()
             }
         };
         return {
@@ -117,67 +117,71 @@ export default {
             return time.getTime() < Date.now();
         },
         onSubmit(formName) {
-            console.log("onSubmit");
-            const wait_swal = this.$swal({
+            this.$swal.fire({
                 title: 'Wait for creating...',
                 allowOutsideClick: false,
                 allowEscapeKey: false,
                 showConfirmButton: false,
                 showCancelButton: false,
                 showDenyButton: false,
-            });
-            wait_swal.fire(
-                this.deleteEvent(this.$refs[formName].validate(async (valid) => {
-                    if (valid) {
-                        let axios_response = null;
-                        console.log('API: post => /home/add-calendar-event');
-                        await axios.post('/home/add-calendar-event', {
-                            event: this.form_add_calendar_event.event,
-                            start_date: this.form_add_calendar_event.start_date,
-                            end_date: this.form_add_calendar_event.end_date,
-                        })
-                            .then(function (response) {
-                                axios_response = response
-                                console.log(axios_response);
+                didOpen: () => {
+                    this.$refs[formName].validate(async (valid) => {
+                        if (valid) {
+                            let axios_response = null;
+                            const formatDate = (date) => {
+                                return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+                            }
+                            console.log('API: post => /home/add-calendar-event/post');
+                            await axios.post('/home/add-calendar-event/post', {
+                                name: this.form_add_calendar_event.name,
+                                event: this.form_add_calendar_event.event,
+                                start_date: formatDate(this.form_add_calendar_event.start_date),
+                                end_date: formatDate(this.form_add_calendar_event.end_date),
                             })
-                            .catch(function (error) {
-                                console.log(error);
-                            });
-                        if (axios_response !== null) {
-                            if (axios_response) {
+                                .then(function (response) {
+                                    console.log(response);
+                                    axios_response = response
+                                })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                            if (axios_response !== null) {
+                                if (axios_response.status === 201) {
+                                    this.$swal.fire({
+                                        icon: 'success',
+                                        title: 'Create Success!!',
+                                        timer: 2000
+                                    })
+                                    location.reload();
+                                }
+                            } else {
                                 this.$swal.fire({
-                                    icon: 'success',
-                                    title: 'Create Success!!',
+                                    icon: 'error',
+                                    title: 'Create Fail!!',
+                                    text: 'API has bad return!',
                                     timer: 2000
                                 })
-                                location.reload()
                             }
                         } else {
                             this.$swal.fire({
                                 icon: 'error',
                                 title: 'Create Fail!!',
-                                text: 'API has bad return!',
+                                text: 'Something went wrong!',
                                 timer: 2000
                             })
+                            this.resetForm(formName)
                         }
-                    } else {
-                        this.$swal.fire({
-                            icon: 'error',
-                            title: 'Create Fail!!',
-                            text: 'Something went wrong!',
-                            timer: 2000
-                        })
-                        this.resetForm(formName)
-                    }
-                })));
-            wait_swal.close();
+                    });
+                },
+            }).then(() => {
+            });
         },
         async getUserList() {
-            console.log("getUserList");
             let axios_response;
-            await axios.get('/home/user-list', {}).then(function (response) {
-                axios_response = response
+            console.log('API: get => /home/user-list/get');
+            await axios.get('/home/user-list/get', {}).then(function (response) {
                 console.log(response);
+                axios_response = response
             }).catch(function (error) {
                 console.log(error);
             });

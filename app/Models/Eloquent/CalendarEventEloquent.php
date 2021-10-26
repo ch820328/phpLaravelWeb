@@ -12,17 +12,18 @@ use Eloquent;
  * @property int    $user_id
  * @property string $user_name
  * @property string $event
- * @property mixed  $start_at
- * @property mixed  $end_at
- * @property mixed  $created_at
- * @property mixed  $updated_at
- * @property mixed  $deleted_at
+ * @property Carbon $start_at
+ * @property Carbon $end_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ * @property Carbon $deleted_at
  */
 class CalendarEventEloquent extends Eloquent implements CalendarEvent
 {
     use SoftDeletes;
 
     protected $table = 'calendar_event';
+
     /**
      * The attributes that are mass assignable.
      *

@@ -21,6 +21,11 @@ interface Users extends BaseEntity, Authenticatable, Authorizable, Roles
     /**
      * @return string
      */
+    public function getColor(): string;
+
+    /**
+     * @return string
+     */
     public function getEmail(): string;
 
     /**

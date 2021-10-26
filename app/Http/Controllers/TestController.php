@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\CalendarEventRepo;
-use Carbon\Carbon;
 use App\Services\CalendarEventService;
-use phpDocumentor\Reflection\Types\Collection;
+use InformationRepo;
+use JetBrains\PhpStorm\NoReturn;
 
 class TestController extends Controller
 {
@@ -31,13 +30,9 @@ class TestController extends Controller
         return json_encode($data);
     }
 
-    /**
-     * @return string
-     */
-    public function Test2(): string
+    #[NoReturn] public function Test2()
     {
-        $test = new CalendarEventService();
-        $test2 = $test->getCalendarEventArray();
-        return json_encode($test2);
+        dd(InformationRepo::findByPage('Family'));
+        return InformationRepo::findByPage($page);
     }
 }

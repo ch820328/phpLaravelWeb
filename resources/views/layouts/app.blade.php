@@ -38,6 +38,10 @@
         background: #ffffff;
         padding: 10px;
     }
+    .el-tabs--top {
+        border-radius: 0.5em;
+        border: solid 1px #cbd5e0;
+    }
 
     .el-card {
         background: #ffffff;

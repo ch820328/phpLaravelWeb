@@ -13,31 +13,25 @@
         active-text-color="#ffd04b"
         style="border-right-width: 0;">
         <el-menu-item index="/home"><a href="http://localhost/home/" style="color: #ffffff;">
-            <!--            <a href="http://localhost/home/">-->
-            <!--                <div style="text-align:center; font-weight: bold; font-size: 24px; color: #ffffff"><i class="el-icon-s-home"></i>Sepan</div>-->
-            <!--            </a>-->
             <i class="el-icon-s-home" style="font-size: 125%;"></i>
             <span style="text-align:center; font-weight: bold; font-size: 24px;">
-                Sepan</span></a>
+                首頁</span></a>
         </el-menu-item>
-        <el-sub-menu index="/home/administrator">
+        <el-sub-menu index="/information">
             <template #title>
-                <i class="el-icon-location"></i>
-                <span>Administrator</span>
+                <i class="el-icon-tickets"></i>
+                <span>實用資訊</span>
             </template>
-            <el-menu-item index="/home/administrator/user-list">User List</el-menu-item>
-            <el-sub-menu index="/home/administrator/2">
-                <template #title>Group 2</template>
-                <el-menu-item index="/home/administrator/2-1">Option 2-1</el-menu-item>
-            </el-sub-menu>
+            <el-menu-item index="/information/family">家用</el-menu-item>
+            <el-menu-item index="/information/program">程式</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="/home/message">
             <template #title>
                 <i class="el-icon-message"></i>
-                <span>Message</span>
+                <span>測試</span>
             </template>
-            <el-menu-item index="/home/message/1">Option 1</el-menu-item>
-            <el-menu-item index="/home/message/2">Option 2</el-menu-item>
+            <el-menu-item index="/home/message/1">測試 1</el-menu-item>
+            <el-menu-item index="/home/message/2">測試 2</el-menu-item>
         </el-sub-menu>
     </el-menu>
 </template>

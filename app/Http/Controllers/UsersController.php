@@ -34,8 +34,6 @@ class UsersController extends Controller
      */
     public function logout(): Redirector|Application|RedirectResponse
     {
-        $username = Auth::user();
-        Log::info(__CLASS__ . __FUNCTION__ . __LINE__, ['Message' => 'User ' . $username . ' logout.']);
         Auth::logout();
         return redirect('/login');
     }
@@ -45,7 +43,6 @@ class UsersController extends Controller
      */
     public function getUserList(): ?Collection
     {
-        dd($this->usersService->getAllUsers());
         return $this->usersService->getAllUsers();
     }
 }
