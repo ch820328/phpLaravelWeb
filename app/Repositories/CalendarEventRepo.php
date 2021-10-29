@@ -52,6 +52,6 @@ class CalendarEventRepo extends BaseRepo implements CalendarEventRepoContract
      */
     public function findFutureEvent(): Collection
     {
-        return CalendarEventEloquent::query()->where('end_at', '>', Carbon::today())->orderBy('start_at', 'asc')->get();
+        return CalendarEventEloquent::query()->where('end_at', '>', Carbon::today())->orderBy('user_name', 'desc')->get();
     }
 }

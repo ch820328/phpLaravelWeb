@@ -7,12 +7,10 @@ use App\Contracts\Repositories\ActionLogRepoContract;
 use App\Contracts\Repositories\RoleRepoContract;
 use App\Contracts\Repositories\UsersRepoContract;
 use App\Contracts\Repositories\CalendarEventRepoContract;
-use App\Contracts\Repositories\InformationRepoContract;
 use App\Repositories\ActionLogRepo;
 use App\Repositories\RoleRepo;
 use App\Repositories\UsersRepo;
 use App\Repositories\CalendarEventRepo;
-use App\Repositories\InformationRepo;
 use Illuminate\Support\ServiceProvider;
 
 class RepoServiceProvider extends ServiceProvider
@@ -38,6 +36,5 @@ class RepoServiceProvider extends ServiceProvider
         $this->app->bind(ActionLogRepoContract::class, ActionLogRepo::class);
         $this->app->bind(RoleRepoContract::class, RoleRepo::class);
         $this->app->bind(CalendarEventRepoContract::class, CalendarEventRepo::class);
-        $this->app->bind(InformationRepoContract::class, InformationRepo::class);
     }
 }
