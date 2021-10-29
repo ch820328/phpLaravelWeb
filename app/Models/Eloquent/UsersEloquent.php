@@ -11,7 +11,6 @@ use Spatie\Permission\Traits\HasRoles;
 /**
  * @property int         $id
  * @property string      $name
- * @property string      $color
  * @property string      $email
  * @property string|null $email_verified_at
  * @property string      $password
@@ -32,7 +31,7 @@ class UsersEloquent extends Authenticatable implements Users
      * @var array
      */
     protected $fillable = [
-        'name', 'color', 'email', 'email_verified_at', 'password', 'remember_token', 'created_at', 'updated_at',
+        'name', 'email', 'email_verified_at', 'password', 'remember_token', 'created_at', 'updated_at',
     ];
 
     /**
@@ -67,14 +66,6 @@ class UsersEloquent extends Authenticatable implements Users
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getColor(): string
-    {
-        return $this->color;
     }
 
     /**

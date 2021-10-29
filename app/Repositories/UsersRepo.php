@@ -42,7 +42,7 @@ class UsersRepo extends BaseRepo implements UsersRepoContract
      */
     public function findByUserName(string $userName): ?Users
     {
-        return UsersEloquent::where('name', $userName)->first();
+        return UsersEloquent::where('username', $userName)->first();
     }
 
 }

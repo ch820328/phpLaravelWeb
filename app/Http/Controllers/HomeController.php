@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Services\CalendarEventService;
 use App\Services\UsersService;
-use Illuminate\Http\JsonResponse;
+use DB;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Support\Renderable;
-use DB;
+use Illuminate\Support\Facades\Auth;
 use Log;
-use Exception;
 use Throwable;
 
 class HomeController extends Controller
@@ -40,17 +40,6 @@ class HomeController extends Controller
     }
 
     /**
-     * Show the application dashboard.
-     *
-     * @return JsonResponse
-     */
-    public function checkWebAuth(): JsonResponse
-    {
-        return response()->json(['result' => true], 200);
-    }
-
-
-    /**
      * @return string
      */
     public function getCalendarEvent(): string
@@ -78,46 +67,33 @@ class HomeController extends Controller
     /**
      * @param Request $request
      *
-     * @return JsonResponse
+     * @return bool
      */
-    public function addCalendarEvent(Request $request): JsonResponse
+    public function addCalendarEvent(Request $request): bool
     {
-        Log::info(__CLASS__ . ' - ' .  __FUNCTION__ . ' - ' . __LINE__);
-        Log::info($request);
-        $result = $this->calendarEventService->createCalendarEvent($request);
-
-        if ($result) {
-            $statusCode = 201;
-        } else {
-            $statusCode = 400;
-        }
-        return response()->json(['result' => $result], $statusCode);
+        $userId   = Auth::user()->{'id'};
+        $userName = Auth::user()->{'name'};
+        return $this->calendarEventService->createCalendarEvent($request, $userId, $userName);
     }
 
     /**
      * @param int $eventId
      *
-     * @return JsonResponse
+     * @return bool
      * @throws Throwable
      */
-    public function deleteCalendarEvent(int $eventId): JsonResponse
+    public function deleteCalendarEvent(int $eventId): bool
     {
         DB::beginTransaction();
         try {
             $result = $this->calendarEventService->deleteCalendarEvent($eventId);
             DB::commit();
         } catch (Exception $e) {
-            Log::info(__CLASS__ . ' - ' .  __FUNCTION__ . ' - ' . __LINE__);
-            Log::error($e->getMessage());
+            Log::error($e->getMessage(), $e->getTrace());
             DB::rollBack();
             throw $e;
         }
 
-        if ($result) {
-            $statusCode = 204;
-        } else {
-            $statusCode = 400;
-        }
-        return response()->json(['result' => $result], $statusCode);
+        return $result;
     }
 }
