@@ -1,7 +1,7 @@
 <template>
     <el-tabs type="border-card" style="font-size: 16px;">
-        <el-tab-pane label="Common">
-            <el-table :data="table_common" :border="true">
+        <el-tab-pane v-for="(item) in table_tab_list" :label="item.label">
+            <el-table :data="item.data" :border="true">
                 <el-table-column prop="name" width="160" label="名稱" align="center"></el-table-column>
                 <el-table-column prop="type" width="160" label="類型" align="center"></el-table-column>
                 <el-table-column prop="description" width="480" label="描述" align="center"></el-table-column>
@@ -15,7 +15,7 @@
                 </el-table-column>
                 <el-table-column label="操作" width="240" align="center">
                     <template #default="scope">
-                        <el-button type="primary" size="medium" @click="tableEdit('common', scope.row)">
+                        <el-button type="primary" size="medium" @click="tableEdit(item.label, scope.row)">
                             編輯
                         </el-button>
                         <el-button type="danger" size="medium" @click="(deleteInformationConfirm(scope.row.id))">
@@ -24,44 +24,14 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-button type="success" size="medium" @click="tableEdit('common')" style="margin-top: 20px;">
+            <el-button type="success" size="medium" @click="tableEdit(item.label)" style="margin-top: 20px;">
                 新建
             </el-button>
         </el-tab-pane>
-
-        <el-tab-pane label="PHP">
-            <el-table :data="table_php" :border="true">
-                <el-table-column prop="name" width="160" label="名稱" align="center"></el-table-column>
-                <el-table-column prop="type" width="160" label="類型" align="center"></el-table-column>
-                <el-table-column prop="description" width="480" label="描述" align="center"></el-table-column>
-                <el-table-column label="網址" width="120" align="center">
-                    <template #default="scope">
-                        <div v-if="scope.row.url !== null">
-                            <a :href="scope.row.url" target="_blank">連結</a>
-                        </div>
-                        <div v-else></div>
-                    </template>
-                </el-table-column>
-                <el-table-column label="操作" width="240" align="center">
-                    <template #default="scope">
-                        <el-button type="primary" size="medium" @click="tableEdit('php', scope.row)">
-                            編輯
-                        </el-button>
-                        <el-button type="danger" size="medium" @click="(deleteInformationConfirm(scope.row.id))">
-                            刪除
-                        </el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-button type="success" size="medium" @click="tableEdit('php')" style="margin-top: 20px;">
-                新建
-            </el-button>
-        </el-tab-pane>
-
     </el-tabs>
-
-    <el-dialog v-model="table_common_dialog_visible">
-        <el-form :model="form" ref="table_common_dialog" :rules="table_common_dialog_rules" :label-width="formLabelWidth">
+    <el-dialog  v-for="(item) in table_tab_list" v-model="item.dialog">
+        <div>更新資訊</div>
+        <el-form :model="form" :ref="item.form_name" :rules="table_dialog_rules" :label-width="formLabelWidth">
             <el-form-item prop="name" label="名稱">
                 <el-input v-model="form.name" autocomplete="off"></el-input>
             </el-form-item>
@@ -77,35 +47,11 @@
         </el-form>
         <template #footer>
             <span class="dialog-footer">
-                <el-button @click="table_common_dialog_visible = false">取消</el-button>
-                <el-button type="primary" @click="onSubmit('table_common_dialog', 'program', 'common')">送出</el-button>
+                <el-button @click="item.dialog = false">取消</el-button>
+                <el-button type="primary" @click="onSubmit(item.form_name, 'program', item.label)">送出</el-button>
             </span>
         </template>
     </el-dialog>
-
-    <el-dialog v-model="table_php_dialog_visible">
-        <el-form :model="form" ref="table_php_dialog" :rules="table_php_dialog_rules" :label-width="formLabelWidth">
-            <el-form-item prop="name" label="名稱">
-                <el-input v-model="form.name" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item prop="type" label="類型">
-                <el-input v-model="form.type" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item prop="description" label="描述">
-                <el-input v-model="form.description" autocomplete="off"></el-input>
-            </el-form-item>
-            <el-form-item prop="url" label="網址">
-                <el-input v-model="form.url" autocomplete="off"></el-input>
-            </el-form-item>
-        </el-form>
-        <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="table_php_dialog_visible = false">取消</el-button>
-                <el-button type="primary" @click="onSubmit('table_php_dialog', 'program', 'php')">送出</el-button>
-            </span>
-        </template>
-    </el-dialog>
-
 </template>
 <script>
 
@@ -114,17 +60,14 @@ export default {
         return {
             form: {},
             formLabelWidth: '120px',
-            table_common: [],
-            table_php: [],
-            table_common_dialog_visible: false,
-            table_php_dialog_visible: false,
-            table_common_dialog_rules: {
-                name: [{required: true, message: 'This field is not filled.'}],
-                type: [{required: true, message: 'This field is not filled.'}],
-                description: [{required: true, message: 'This field is not filled.'}],
-                url: [{required: true, message: 'This field is not filled.'}],
-            },
-            table_php_dialog_rules: {
+            table_tab_list: [
+                {label: 'Common', data: this.table_common = [], form_name: 'table_common_dialog', dialog: this.table_common_dialog_visible = false},
+                {label: 'PHP', data: this.table_php = [], form_name: 'table_php_dialog', dialog: this.table_php_dialog_visible = false},
+                {label: 'Python', data: this.table_python = [], form_name: 'table_python_dialog', dialog: this.table_python_dialog_visible = false},
+                {label: 'Web', data: this.table_web = [], form_name: 'table_web_dialog', dialog: this.table_web_dialog_visible = false},
+                {label: 'Database', data: this.table_database = [], form_name: 'table_database_dialog', dialog: this.table_database_dialog_visible = false},
+            ],
+            table_dialog_rules: {
                 name: [{required: true, message: 'This field is not filled.'}],
                 type: [{required: true, message: 'This field is not filled.'}],
                 description: [{required: true, message: 'This field is not filled.'}],
@@ -133,25 +76,40 @@ export default {
         };
     },
     created() {
-        this.getFamilyList();
+        this.getProgramList();
     },
     mounted() {
         this.timer = setInterval(() => {
-            this.getFamilyList();
+            this.getProgramList();
         }, 1000 * 300)
     },
     destroyed() {
     },
     methods: {
         cleanTable() {
-            this.table_common = [];
-            this.table_php = [];
+            this.table_tab_list.forEach(function (item) {
+                item.data = [];
+            });
         },
         closeDialog() {
-            this.table_common_dialog_visible = false;
-            this.table_php_dialog_visible = false;
+            this.table_tab_list.forEach(function (item) {
+                item.dialog = false;
+            });
         },
-        async getFamilyList() {
+        openDialog(tab) {
+            let form_name;
+            this.table_tab_list.forEach(function (item) {
+                if (item.label === tab) {
+                    item.dialog = true;
+                    form_name = item.form_name
+                }
+            });
+            try {
+                this.$refs[form_name].clearValidate();
+            } catch (e) {
+            }
+        },
+        async getProgramList() {
             let axios_response;
             console.log('API: get => /information/program/get');
             await axios.get('/information/program/get', {}).then(function (response) {
@@ -164,28 +122,17 @@ export default {
             for (let i = 0; i < axios_response.data.length; i++) {
                 let note = JSON.parse(axios_response.data[i]['note']);
                 try {
-                    switch (axios_response.data[i]['tab']) {
-                        case 'common':
-                            this.table_common.push({
+                    this.table_tab_list.forEach(function (item) {
+                        if (item.label === axios_response.data[i]['tab']) {
+                            item.data.push({
                                 id: axios_response.data[i]['id'],
                                 type: axios_response.data[i]['type'],
                                 name: axios_response.data[i]['name'],
                                 description: note['description'],
                                 url: axios_response.data[i]['url'],
                             })
-                            break;
-                        case 'php':
-                            this.table_php.push({
-                                id: axios_response.data[i]['id'],
-                                type: axios_response.data[i]['type'],
-                                name: axios_response.data[i]['name'],
-                                description: note['description'],
-                                url: axios_response.data[i]['url'],
-                            })
-                            break;
-                        default:
-                            console.log(axios_response.data[i]['tab'] + ' Not Found.');
-                    }
+                        }
+                    });
                 } catch (e) {
                     console.log(e);
                 }
@@ -196,22 +143,7 @@ export default {
             if (data) {
                 this.form = data;
             }
-            switch (tab) {
-                case 'common':
-                    this.table_common_dialog_visible = true;
-                    this.$nextTick(() => {
-                        this.$refs['table_common_dialog'].clearValidate();
-                    });
-                    break;
-                case 'php':
-                    this.table_php_dialog_visible = true;
-                    this.$nextTick(() => {
-                        this.$refs['table_php_dialog'].clearValidate();
-                    });
-
-                    break;
-                default:
-            }
+            this.openDialog(tab);
         },
         deleteInformationConfirm(information_id) {
             this.$swal.fire({

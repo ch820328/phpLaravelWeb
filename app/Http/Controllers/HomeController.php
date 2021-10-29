@@ -40,6 +40,17 @@ class HomeController extends Controller
     }
 
     /**
+     * Show the application dashboard.
+     *
+     * @return JsonResponse
+     */
+    public function checkWebAuth(): JsonResponse
+    {
+        return response()->json(['result' => true], 200);
+    }
+
+
+    /**
      * @return string
      */
     public function getCalendarEvent(): string
