@@ -4,39 +4,31 @@ export default [
         name: "home",
         component: () =>
             import("./components/layout/home/home.vue"),
-        children: [
-            {
-                path: "/home/message/1",
-                name: "message1",
-                component: () =>
-                    import("./components/layout/home/message/one.vue")
-            },
-        ]
     },
     {
-        path: "/home/administrator",
-        name: "administrator",
+        path: "/information",
+        name: "information",
         component: () =>
-            import("./components/layout/home/administrator/administrator.vue"),
+            import("./components/layout/information/information.vue"),
         children: [
             {
-                path: "/home/administrator/user-list",
-                name: "user-list",
+                path: "/information/family",
+                name: "family",
                 component: () =>
-                    import("./components/layout/home/administrator/administrator-user-list.vue")
+                    import("./components/layout/information/family.vue")
             },
             {
-                path: "/home/administrator/2-1",
-                name: "administrator2",
+                path: "/information/program",
+                name: "program",
                 component: () =>
-                    import("./components/layout/home/administrator/administrator-user-list.vue")
+                    import("./components/layout/information/program.vue")
             },
         ]
     },
     {
-        path: "/home/message/2",
+        path: "/message/2",
         name: "message2",
         component: () =>
-            import("./components/layout/home/message/two.vue")
+            import("./components/layout/message/two.vue")
     }
 ]

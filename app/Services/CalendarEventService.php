@@ -6,7 +6,7 @@ use App\Contracts\Entities\CalendarEvent;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
-use JetBrains\PhpStorm\ArrayShape;
+use JetBrains\PhpStorm\Pure;
 use Log;
 use Spatie\Permission\Contracts\Role;
 use Illuminate\Http\Request;
@@ -15,6 +15,18 @@ use RoleRepo;
 
 class CalendarEventService
 {
+    private UsersService         $usersService;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    #[Pure] public function __construct()
+    {
+        $this->usersService         = new UsersService();
+    }
+
     /**
      * @param string $username
      *
@@ -40,14 +52,13 @@ class CalendarEventService
      */
     public function getCalendarEventArray(): array
     {
-        $usersService     = new UsersService();
-        $event_collection = CalendarEventRepo::findAllAlive();
-        $event_array      = [];
+        $eventCollection = CalendarEventRepo::findAllAlive();
+        $eventArray      = [];
         $key              = 0;
-        foreach ($event_collection as $calendarEvent) {
-            $diff_day = Carbon::parse($calendarEvent->getEndAt())->diffInDays($calendarEvent->getStartAt(), true);
-            $dotColor = $usersService->getUserMappingColor($calendarEvent->getUserName());
-            for ($i = 0; $i <= $diff_day; $i++) {
+        foreach ($eventCollection as $calendarEvent) {
+            $diffDay = Carbon::parse($calendarEvent->getEndAt())->diffInDays($calendarEvent->getStartAt(), true);
+            $dotColor = $this->usersService->getUserColor($calendarEvent->getUserName());
+            for ($i = 0; $i <= $diffDay; $i++) {
                 $event         = [
                     "key"     => $key,
                     "popover" => json_encode([
@@ -56,11 +67,11 @@ class CalendarEventService
                     "dot"     => $dotColor,
                     "dates"   => date_format(Carbon::parse($calendarEvent->getStartAt())->addDays($i), 'Y-m-d'),
                 ];
-                $event_array[] = $event;
+                $eventArray[] = $event;
                 $key           += 1;
             }
         }
-        return $event_array;
+        return $eventArray;
     }
 
     /**
@@ -68,44 +79,40 @@ class CalendarEventService
      */
     public function getFutureEventListArray(): array
     {
-        $event_collection = CalendarEventRepo::findFutureEvent();
-        $event_array      = [];
-        foreach ($event_collection as $calendarEvent) {
+        $eventCollection = CalendarEventRepo::findFutureEvent();
+        $eventArray      = [];
+        foreach ($eventCollection as $calendarEvent) {
             $event         = [
                 "id"       => $calendarEvent->getId(),
                 "name"     => $calendarEvent->getUserName(),
-                "start_at" => date_format(Carbon::parse($calendarEvent->getStartAt()), 'm-d'),
-                "end_at"   => date_format(Carbon::parse($calendarEvent->getEndAt()), 'm-d'),
+                "start_at" => date_format(Carbon::parse($calendarEvent->getStartAt()), 'Y-m-d'),
+                "end_at"   => date_format(Carbon::parse($calendarEvent->getEndAt()), 'Y-m-d'),
                 "event"    => $calendarEvent->getEvent(),
             ];
-            $event_array[] = $event;
+            $eventArray[] = $event;
         }
-        return $event_array;
+        return $eventArray;
     }
 
     /**
      * @param Request $request
-     * @param int     $userId
-     * @param string  $userName
      *
      * @return bool
      */
-    public function createCalendarEvent(Request $request, int $userId, string $userName): bool
+    public function createCalendarEvent(Request $request): bool
     {
         try {
             $group = CalendarEventRepo::make();
-            $group->setUserId($userId);
-            $group->setUserName($userName);
+            $group->setUserId($this->usersService->findByUsername($request->get('name'))->getId());
+            $group->setUserName($request->get('name'));
             $group->setStartAt(Carbon::parse($request->get('start_date')));
             $group->setEndAt(Carbon::parse($request->get('end_date')));
             $group->setEvent($request->get('event'));
-
             CalendarEventRepo::create($group->toArray());
-
             return true;
-
         } catch (Exception $e) {
-            Log::error($e->getMessage(), $e->getTrace());
+            Log::info(__CLASS__ . ' - ' .  __FUNCTION__ . ' - ' . __LINE__);
+            Log::error($e->getMessage());
             return false;
         }
     }
@@ -121,7 +128,8 @@ class CalendarEventService
             CalendarEventRepo::delete($eventId);
             return true;
         } catch (Exception $e) {
-            Log::error($e->getMessage(), $e->getTrace());
+            Log::info(__CLASS__ . ' - ' .  __FUNCTION__ . ' - ' . __LINE__);
+            Log::error($e->getMessage());
             return false;
         }
     }

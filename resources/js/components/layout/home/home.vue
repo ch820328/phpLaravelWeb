@@ -3,11 +3,13 @@
         <el-row :gutter="20">
             <el-col :xs="24" :sm="24" :md="17" :lg="17" :xl="17">
                 <el-card class="box-card" :body-style="{ padding: '10px' }">
+                    <div style="text-align: center; font-size: 20px;">月曆</div>
                     <home_calendar></home_calendar>
                 </el-card>
             </el-col>
             <el-col :xs="24" :sm="24" :md="7" :lg="7" :xl="7">
                 <el-card class="box-card" :body-style="{ padding: '10px' }">
+                    <div style="text-align: center; font-size: 20px;">使用者清單</div>
                     <home_user_list></home_user_list>
                 </el-card>
             </el-col>
@@ -15,18 +17,19 @@
         <el-row :gutter="20">
             <el-col :xs="24" :sm="24" :md="17" :lg="17" :xl="17">
                 <el-card class="box-card" :body-style="{ padding: '10px' }">
+                    <div style="text-align: center; font-size: 20px;">未結束事件清單</div>
                     <hom_future_event_list></hom_future_event_list>
                 </el-card>
             </el-col>
             <el-col :xs="24" :sm="24" :md="7" :lg="7" :xl="7">
                 <el-card class="box-card" :body-style="{ padding: '10px' }">
+                    <div style="text-align: center; font-size: 20px;">新增事件</div>
                     <home_add_calendar_event></home_add_calendar_event>
                 </el-card>
             </el-col>
         </el-row>
     </div>
 </template>
-
 <script>
 import home_add_calendar_event from './home-add-calendar-event.vue'
 import home_calendar from './home-calendar.vue'
@@ -37,13 +40,14 @@ export default {
     props: ["title"],
     data() {
         return {
-            header_title_update: "Calendar",
+            header_title_update: "首頁",
         };
     },
     created() {
         this.update_header_title();
     },
     mounted() {
+        setInterval("link_web.innerHTML=new Date().toLocaleString('zh-TW')+' 星期'+'日一二三四五六'.charAt(new Date().getDay());",1000);
     },
     destroyed() {
     },
@@ -59,6 +63,8 @@ export default {
         hom_future_event_list,
     },
 };
+</script>
+<script>
 </script>
 <style>
 .el-row {

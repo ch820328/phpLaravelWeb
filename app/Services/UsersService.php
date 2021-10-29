@@ -51,16 +51,9 @@ class UsersService
      *
      * @return string
      */
-    public function getUserMappingColor($userName): string
+    public function getUserColor($userName): string
     {
-        $result       = 'gray';
-        $colorMapping = [
-            'SepanTsai' => 'red'
-        ];
-        if (array_key_exists($userName, $colorMapping)) {
-            $result = $colorMapping[$userName];
-        }
-        return $result;
+        return UsersRepo::findByUserName($userName)->getColor();
     }
 
     /**
@@ -71,11 +64,9 @@ class UsersService
         $user_array = [];
         $userList   = $this->getAllUsers();
         foreach ($userList as $userInfo) {
-            $userName             = $userInfo->getName();
-            $userNameMappingColor = $this->getUserMappingColor($userName);
             $user = [
-                "name"  => $userName,
-                "color" => $userNameMappingColor,
+                "name"  => $userInfo->getName(),
+                "color" => $userInfo->getColor(),
             ];
 
             $user_array[] = $user;

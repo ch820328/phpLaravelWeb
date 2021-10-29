@@ -67,7 +67,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Taipei',
 
     /*
     |--------------------------------------------------------------------------
@@ -237,6 +237,7 @@ return [
         'RoleRepo'          => App\Facades\RoleRepo::class,
         'UsersRepo'         => App\Facades\UsersRepo::class,
         'CalendarEventRepo' => App\Facades\CalendarEventRepo::class,
+        'InformationRepo'   => App\Facades\InformationRepo::class,
 
     ],
 
