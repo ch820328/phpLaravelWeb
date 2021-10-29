@@ -13,6 +13,7 @@
                 <router-view @update_title_event="update_parent_title_event" :title="header_title"></router-view>
             </el-main>
             <el-footer height="30px">
+                <div id="link_web" style="text-align: center; font-size: 20px;"></div>
             </el-footer>
         </el-container>
         <nav_aside_setting></nav_aside_setting>
@@ -36,6 +37,7 @@ export default {
         }
     },
     created() {
+        this.checkWebAuth();
         this.initial_nav_aside_collapse();
     },
     mounted() {
@@ -48,6 +50,9 @@ export default {
         };
         console.log(this.$route);
         console.log('Window width: ', this.screen_width, 'Window height: ', this.screen_height);
+        this.timer = setInterval(() => {
+            this.checkWebAuth();
+        }, 1000 * 300)
     },
     methods: {
         update_parent_title_event(value) {
@@ -58,6 +63,17 @@ export default {
                 this.is_collapse = true;
                 this.aside_width = "64px";
             }
+        },
+        async checkWebAuth() {
+            let axios_response;
+            console.log('API: get => /check-web-auth/get');
+            await axios.get('/check-web-auth/get', {}).then(function (response) {
+                console.log(response);
+                axios_response = response
+            }).catch(function (error) {
+                console.log(error);
+                location.reload();
+            });
         },
     },
     watch: {

@@ -43,6 +43,6 @@ class InformationRepo extends BaseRepo implements InformationRepoContract
      */
     public function findByPage(string $page): Collection
     {
-        return InformationEloquent::where('page', $page)->orderBy('type', 'desc')->get();
+        return InformationEloquent::where('page', $page)->orderBy('name')->orderBy('type', )->get();
     }
 }

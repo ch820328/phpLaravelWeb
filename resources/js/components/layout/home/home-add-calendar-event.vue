@@ -109,6 +109,9 @@ export default {
         this.getUserList();
     },
     mounted() {
+        this.timer = setInterval(() => {
+            this.getUserList();
+        }, 1000 * 300)
     },
     destroyed() {
     },

@@ -20,6 +20,7 @@ Route::get('/', 'HomeController@index');
 Route::get('/logout', 'UsersController@logout');
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('/check-web-auth/get', 'HomeController@checkWebAuth');
     Route::get('/home', 'HomeController@index');
     Route::group(['prefix' => 'home'], function () {
         Route::get('/calendar/get', 'HomeController@getCalendarEvent');
